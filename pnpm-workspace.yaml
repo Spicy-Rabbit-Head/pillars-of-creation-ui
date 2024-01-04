@@ -1,0 +1,4 @@
+packages:
+  - common/*  # 公共模块
+  - playground # 组件测试
+  - docs # 文档

@@ -1,0 +1,64 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "jsxImportSource": "vue",
+    /* 打包模块类型 */
+    "module": "ESNext",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "outDir": "dist",
+    "skipLibCheck": true,
+    "noLib": false,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "strictFunctionTypes": false,
+    "baseUrl": ".",
+    "allowJs": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": false,
+    "types": [
+      "node",
+      "vite/client"
+    ],
+    "removeComments": true,
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@pillars-of-creation-ui/*": [
+        "common/*/src"
+      ],
+      "pillars-of-creation-ui": [
+        "."
+      ]
+    },
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": [
+    "common/*/src",
+    "components",
+    "playground",
+    "index.ts",
+    "full-lib.ts",
+    "types.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

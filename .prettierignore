@@ -1,0 +1,15 @@
+dist
+es
+lib
+node_modules
+public
+cache
+.husky
+
+*.svg
+*.sh
+
+CHANGELOG.md
+
+common/icons/vue
+common/icons/types

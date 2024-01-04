@@ -1,0 +1,145 @@
+{
+  "name": "pillars-of-creation-ui",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "MIT",
+  "author": "Zikui Zhao",
+  "packageManager": "pnpm@8.2.0",
+  "scripts": {
+    "build": "tsx scripts/build.ts",
+    "bootstrap": "tsx scripts/bootstrap.ts",
+    "props": "tsx scripts/props.ts",
+    "serve": "pnpm -C playground run serve",
+    "docs:dev": "pnpm -C docs run dev",
+    "build:common": "run-s build:utils build:hooks build:config",
+    "build:config": "pnpm -C common/config build && pnpm i",
+    "build:hooks": "pnpm -C common/hooks build && pnpm i",
+    "build:utils": "pnpm -C common/utils build && pnpm i",
+    "build:scripts": "pnpm -C common/scripts build && pnpm i"
+  },
+  "main": "lib/index.cjs",
+  "module": "es/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./es/index.mjs",
+      "require": "./lib/index.cjs"
+    },
+    "./es": {
+      "types": "./dist/index.d.ts",
+      "import": "./es/index.mjs"
+    },
+    "./lib": {
+      "types": "./dist/index.d.ts",
+      "require": "./lib/index.cjs"
+    },
+    "./es/*.mjs": {
+      "types": "./dist/*.d.ts",
+      "import": "./es/*.mjs"
+    },
+    "./es/*": {
+      "types": [
+        "./dist/*.d.ts",
+        "./dist/*/index.d.ts"
+      ],
+      "import": "./es/*.mjs"
+    },
+    "./lib/*.cjs": {
+      "types": "./dist/*.d.ts",
+      "require": "./lib/*.cjs"
+    },
+    "./lib/*": {
+      "types": [
+        "./dist/*.d.ts",
+        "./dist/*/index.d.ts"
+      ],
+      "require": "./lib/*.cjs"
+    },
+    "./package.json": "./package.json",
+    "./*": "./*"
+  },
+  "sideEffects": [
+    "dist/*",
+    "es/components/*/style.mjs",
+    "es/style/*",
+    "es/css/*",
+    "lib/components/*/style.cjs",
+    "lib/style/*",
+    "lib/css/*",
+    "style/**/*.scss",
+    "theme/**/*.css"
+  ],
+  "files": [
+    "css",
+    "dist",
+    "es",
+    "lib",
+    "meta-data",
+    "style",
+    "themes",
+    "CHANGELOG.md",
+    "meta-data.json",
+    "types.d.ts"
+  ],
+  "keywords": [
+    "flex",
+    "components",
+    "vue",
+    "pillars-of-creation",
+    "plugin",
+    "toolkit",
+    "pillars-of-creation-ui",
+    "vite"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@pillars-of-creation-ui/config": "workspace:*",
+    "@pillars-of-creation-ui/hooks": "workspace:*",
+    "@pillars-of-creation-ui/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@pillars-of-creation-ui/scripts": "workspace:*",
+    "@types/node": "^20.8.10",
+    "@types/minimist": "^1.2.5",
+    "@types/fs-extra": "^11.0.4",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
+    "vite-plugin-restart": "^0.3.1",
+    "rollup-plugin-visualizer": "^5.9.2",
+    "fast-glob": "^3.3.1",
+    "minimist": "^1.2.8",
+    "npm-run-all": "^4.1.5",
+    "unocss": "^0.57.3",
+    "@unocss/transformer-variant-group": "^0.57.3",
+    "@unocss/transformer-directives": "^0.57.3",
+    "fs-extra": "^11.2.0",
+    "@types/eslint": "^8.44.4",
+    "eslint": "^8.51.0",
+    "@pillars-of-creation-ui/eslint-config": "0.0.1",
+    "@pillars-of-creation-ui/prettier-config": "0.0.1",
+    "tsx": "^4.6.2",
+    "typescript": "^5.2.2",
+    "vue": "^3.3.4",
+    "vite": "5.0.5",
+    "vite-plugin-dts": "^3.6.0",
+    "vue-tsc": "^1.8.5"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.25"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search",
+        "vue"
+      ],
+      "allowAny": [
+        "@csstools/*"
+      ]
+    }
+  }
+}
+
