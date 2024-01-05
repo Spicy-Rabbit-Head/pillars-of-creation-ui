@@ -22,8 +22,8 @@ importers:
         specifier: 0.0.1
         version: 0.0.1(eslint@8.54.0)(typescript@5.2.2)
       '@pillars-of-creation-ui/prettier-config':
-        specifier: 0.0.1
-        version: 0.0.1(prettier@3.1.1)
+        specifier: 0.0.2
+        version: 0.0.2(prettier@3.1.1)
       '@pillars-of-creation-ui/scripts':
         specifier: workspace:*
         version: link:common/scripts
@@ -1302,8 +1302,8 @@ packages:
       - typescript
     dev: true
 
-  /@pillars-of-creation-ui/prettier-config@0.0.1(prettier@3.1.1):
-    resolution: {integrity: sha512-0xgPtvqsdR+/fhdZ/hvWiAnaafK8jC1M3n3pJl5QA/M108f2EGxKK/PynLbnXO9G3B4tM0MmTNC2NcSKHbXMTg==}
+  /@pillars-of-creation-ui/prettier-config@0.0.2(prettier@3.1.1):
+    resolution: {integrity: sha512-oMCJHl5iCKqNUsDqHjzORursFqgIq7XyiGD55gCMO5a/huurh8meTbhTH7ec0sHjGvAdB33SK0Tr31t4w2uQ/Q==}
     peerDependencies:
       prettier: '>=2.5.0'
     dependencies:

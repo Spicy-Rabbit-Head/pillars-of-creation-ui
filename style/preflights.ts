@@ -1,8 +1,19 @@
-const color = [245, 108, 108]
-const opacities = Array.from({ length: 9 }, (_, index) => index + 1) // 生成透明度列表
+import { baseColor, opacities, typeClass } from './symbol'
+
+export function colorOpacity(type: string[], originalColor: number[][]) {
+  return opacities.reduce((acc, opacity) => {
+    const alpha = (opacity / 10).toFixed(1) // 计算透明度
+    type.forEach((type, index) => {
+      acc[`--poc-color-${type}-opacity-${opacity}`] = `rgba(${originalColor[index].join(
+        ', '
+      )}, ${alpha})`
+    })
+    return acc
+  }, {})
+}
 
 // css变量
-const cssVariables = {
+export const cssVariables = {
   '--poc-badge-color': '#fff',
   '--poc-color-base': '#fff',
   '--poc-color-primary': '#409eff',
@@ -12,10 +23,12 @@ const cssVariables = {
   '--poc-color-error': '#f56c6c',
   '--poc-color-disabled': '#c0c4cc',
   '--poc-badge-font-size': '12px',
+  '--poc-shadow-border': '0 0 0 1px',
   '--poc-base-family':
     '-apple-system, BlinkMacSystemFont,ui-sans-serif, system-ui, Segoe UI, Roboto, Fira Sans, Droid Sans,Arial, Helvetica Neue, sans-serif, Apple Color Emoji, Segoe UI Emoji',
   '--poc-num-family':
-    'Helvetica,Arial,Helvetica Neue,Noto Sans,ui-monospace,Inter, SFMono-Regular, Menlo, Monaco, Consolas,Microsoft YaHei, SimSun, sans-serif'
+    'Helvetica,Arial,Helvetica Neue,Noto Sans,ui-monospace,Inter, SFMono-Regular, Menlo, Monaco, Consolas,Microsoft YaHei, SimSun, sans-serif',
+  ...colorOpacity(typeClass, baseColor)
 }
 
 export function getCSSPreflights() {

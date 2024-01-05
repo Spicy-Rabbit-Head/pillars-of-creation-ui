@@ -1,8 +1,8 @@
 import { toKebabCase } from '@pillars-of-creation-ui/utils'
 
-import type { Rule } from 'unocss'
+import { typeClass } from './symbol'
 
-export const typeClass = ['primary', 'success', 'warning', 'info', 'error', 'disabled']
+import type { Rule } from 'unocss'
 
 export function componentClassRules(): Rule[] {
   return [
