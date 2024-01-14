@@ -2,6 +2,8 @@
 import transformerDirectives from '@unocss/transformer-directives'
 // 分组
 import transformerVariantGroup from '@unocss/transformer-variant-group'
+// jsx归因
+import transformerAttributifyJsx from 'transformer-attributify-jsx-sg'
 import { defineConfig, presetAttributify, presetIcons, presetUno } from 'unocss'
 import { getCSSPreflights } from './style/preflights'
 import { componentClassRules, safelistClassRules } from './style/rules'
@@ -28,7 +30,7 @@ export default defineConfig({
   },
   // 预设的配置
   presets: [presetUno(), presetAttributify(), presetIcons()],
-  transformers: [transformerVariantGroup(), transformerDirectives()],
+  transformers: [transformerVariantGroup(), transformerDirectives(), transformerAttributifyJsx()],
   // 自定义 CSS 快捷方式
   shortcuts: [],
   // 自定义 CSS 规则
