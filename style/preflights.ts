@@ -4,6 +4,7 @@ export function colorOpacity(type: string[], originalColor: number[][]) {
   return opacities.reduce((acc, opacity) => {
     const alpha = (opacity / 10).toFixed(1) // 计算透明度
     type.forEach((type, index) => {
+      if (type === 'disabled') return
       acc[`--poc-color-${type}-opacity-${opacity}`] = `rgba(${originalColor[index].join(', ')}, ${alpha})`
     })
     return acc
@@ -14,14 +15,15 @@ export function colorOpacity(type: string[], originalColor: number[][]) {
 export const cssVariables = {
   '--poc-badge-color': '#fff',
   '--poc-color-base': '#fff',
+  '--poc-color-default': '#c0c4cc',
   '--poc-color-primary': '#409eff',
   '--poc-color-success': '#67c23a',
   '--poc-color-warning': '#e6a23c',
   '--poc-color-info': '#909399',
   '--poc-color-error': '#f56c6c',
   '--poc-color-disabled': '#c0c4cc',
-  '--poc-text-content-color': '#ffffff',
-  '--poc-text-base-color': '#000000',
+  '--poc-text-light-color': '#ffffff',
+  '--poc-text-dark-color': '#000000',
   '--poc-border-color-base': '#ced4da',
   '--poc-font-size': '0.875rem',
   '--poc-badge-font-size': '0.75rem',
@@ -39,6 +41,13 @@ export const cssVariables = {
     '-apple-system, BlinkMacSystemFont,ui-sans-serif, system-ui, Segoe UI, Roboto, Fira Sans, Droid Sans,Arial, Helvetica Neue, sans-serif, Apple Color Emoji, Segoe UI Emoji',
   '--poc-num-family':
     'Helvetica,Arial,Helvetica Neue,Noto Sans,ui-monospace,Inter, SFMono-Regular, Menlo, Monaco, Consolas,Microsoft YaHei, SimSun, sans-serif',
+  '--poc-transition-default': '0.3s ease',
+  '--poc-transition-color': 'color var(--poc-transition-default)',
+  '--poc-transition-background': 'background-color var(--poc-transition-default)',
+  '--poc-transition-border': 'border-color var(--poc-transition-default)',
+  '--poc-transition-shadow': 'box-shadow var(--poc-transition-default)',
+  '--poc-transition-button':
+    'var(--poc-transition-color), var(--poc-transition-background), var(--poc-transition-border), var(--poc-transition-shadow)',
   ...colorOpacity(typeClass, baseColor)
 }
 

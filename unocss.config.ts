@@ -7,6 +7,7 @@ import transformerAttributifyJsx from 'transformer-attributify-jsx-sg'
 import { defineConfig, presetAttributify, presetIcons, presetUno } from 'unocss'
 import { getCSSPreflights } from './style/preflights'
 import { componentClassRules, safelistClassRules } from './style/rules'
+import animation from './style/animation'
 
 export default defineConfig({
   content: {
@@ -31,6 +32,11 @@ export default defineConfig({
   // 预设的配置
   presets: [presetUno(), presetAttributify(), presetIcons()],
   transformers: [transformerVariantGroup(), transformerDirectives(), transformerAttributifyJsx()],
+  theme: {
+    animation: {
+      ...animation
+    }
+  },
   // 自定义 CSS 快捷方式
   shortcuts: [],
   // 自定义 CSS 规则

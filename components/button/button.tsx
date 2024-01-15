@@ -84,11 +84,18 @@ export default defineComponent({
     const type = computed(() => {
       return props.type ?? 'default'
     })
-    const size = computed(() => {
-      return props.size
+    const textColor = computed(() => {
+      return type.value === 'default' ? 'poc-text-dark-color' : 'poc-text-light-color'
+    })
+    const backgroundColor = computed(() => {
+      return type.value === 'default' ? 'bg-white' : `poc-bg-${type.value}`
     })
     const className = computed(() => {
-      return {}
+      return {
+        [textColor.value]: true,
+        [backgroundColor.value]: true,
+        [`poc-b-color-${type.value}`]: true
+      }
     })
 
     return () => {
@@ -96,8 +103,9 @@ export default defineComponent({
 
       return (
         <Button
-          poc='base-family border font-size padding text-base-color b-color-error'
+          poc='base-family border font-size padding'
           h-8
+          animate-ping
           tabular-nums
           leading-normal
           inline-flex
