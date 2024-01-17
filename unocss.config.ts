@@ -5,9 +5,9 @@ import transformerVariantGroup from '@unocss/transformer-variant-group'
 // jsx归因
 import transformerAttributifyJsx from 'transformer-attributify-jsx-sg'
 import { defineConfig, presetAttributify, presetIcons, presetUno } from 'unocss'
-import { getCSSPreflights } from './style/preflights'
-import { componentClassRules, safelistClassRules } from './style/rules'
-import animation from './style/animation'
+import { getCSSPreflights } from './style/root'
+import { classRules, safelistClassRules } from './style/rules/index.ts'
+import { animation } from './style/animation'
 
 export default defineConfig({
   content: {
@@ -35,12 +35,18 @@ export default defineConfig({
   theme: {
     animation: {
       ...animation
+    },
+    borderRadius: {
+      inherit: 'inherit'
     }
   },
   // 自定义 CSS 快捷方式
-  shortcuts: [],
+  shortcuts: {
+    'ping-content':
+      'after:(absolute border-solid border-0 inset-0 box-content block pointer-events-none content-empty bg-transparent rounded-inherit)'
+  },
   // 自定义 CSS 规则
-  rules: [...componentClassRules()],
+  rules: [...classRules()],
   // 安全列表
   safelist: [...safelistClassRules()],
   // 印前检查
@@ -55,6 +61,10 @@ export default defineConfig({
     html{
     font-family: var(--poc-base-family);
     }
+
+    [poc-role="badge"] {
+  color: red;
+}
     `
     }
   ]
