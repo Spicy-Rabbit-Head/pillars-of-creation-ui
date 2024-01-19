@@ -1,6 +1,8 @@
 import { computed, defineComponent, inject, ref } from 'vue'
 
-import { createSizeProp, useProps } from '@pillars-of-creation-ui/config'
+import { createSizeProp, emitEvent, useNameHelper, useProps } from '@pillars-of-creation-ui/config'
+
+import { parseColorToRgba } from '@pillars-of-creation-ui/utils'
 
 import { buttonProps } from './props'
 
@@ -8,6 +10,7 @@ import { buttonTypes } from './symbol'
 
 import type { ComponentSize, ComponentState } from '@pillars-of-creation-ui/config'
 import type { EventEmitter } from '@pillars-of-creation-ui/utils'
+
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
 
 interface FieldOptions {
@@ -75,6 +78,7 @@ export default defineComponent({
       noPulse: false,
       badge: null
     })
+    const nh = useNameHelper('button')
     const pulsing = ref(false)
     const index = ref(0)
     const isLast = ref(false)
@@ -84,28 +88,58 @@ export default defineComponent({
     const type = computed(() => {
       return props.type ?? 'default'
     })
-    const textColor = computed(() => {
-      return type.value === 'default' ? 'poc-text-dark-color' : 'poc-text-light-color'
-    })
-    const backgroundColor = computed(() => {
-      return type.value === 'default' ? 'bg-white' : `poc-bg-${type.value}`
-    })
     const className = computed(() => {
       return {
-        [textColor.value]: true,
-        [backgroundColor.value]: true,
-        [`poc-b-color-${type.value}`]: true
+        'after:animate-button-ping': pulsing.value
       }
     })
+    const colorMap = computed(() => {
+      if (type.value === 'default' && !props.color) return null
+      if (!props.color) {
+        return {
+          color: 'var(--poc-text-light-color)',
+          bgColor: `rgb(var(${nh.nv('color')}-${type.value}))`
+        }
+      }
+      return {
+        color: 'var(--poc-text-light-color)',
+        bgColor: parseColorToRgba(props.color)
+      }
+    })
+
+    const style = computed<Record<string, string>>(() => {
+      const { cvm } = nh
+      if (!colorMap.value) return {}
+      const { color, bgColor } = colorMap.value
+      return cvm({
+        color,
+        'bg-color': bgColor,
+        'border-color': bgColor
+      })
+    })
+
+    function handleClick(event: MouseEvent) {
+      if (props.disabled || props.loading || event.button) return
+
+      if (!props.noPulse) {
+        pulsing.value = false
+        requestAnimationFrame(() => {
+          pulsing.value = true
+        })
+      }
+
+      emitEvent(props.onClick, event)
+    }
 
     return () => {
       const Button = (props.tag || 'button') as any
 
       return (
         <Button
-          poc='base-family border font-size padding'
+          poc='base-family padding-base'
+          relative
+          ping-content
           h-8
-          animate-ping
           tabular-nums
           leading-normal
           inline-flex
@@ -116,11 +150,13 @@ export default defineComponent({
           vertical-middle
           cursor-pointer
           select-none
-          outline-0
           rounded
           type={props.buttonType}
           class={className.value}
           role='button'
+          poc-role='button'
+          style={style.value}
+          onClick={handleClick}
         >
           {!isIconOnly.value && slots.default ? slots.default() : null}
         </Button>
