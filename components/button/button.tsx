@@ -1,14 +1,17 @@
+import { Badge } from '@/components'
+
 import { computed, defineComponent, inject, ref } from 'vue'
 
 import { createSizeProp, emitEvent, useNameHelper, useProps } from '@pillars-of-creation-ui/config'
 
-import { parseColorToRgba } from '@pillars-of-creation-ui/utils'
+import { adjustAlpha, parseColorToRgba } from '@pillars-of-creation-ui/utils'
 
 import { buttonProps } from './props'
 
 import { buttonTypes } from './symbol'
 
 import type { ComponentSize, ComponentState } from '@pillars-of-creation-ui/config'
+
 import type { EventEmitter } from '@pillars-of-creation-ui/utils'
 
 import type { ComputedRef, InjectionKey, Ref } from 'vue'
@@ -90,7 +93,10 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        'after:animate-button-ping': pulsing.value
+        'after:animate-button-ping': pulsing.value && !props.text,
+        'cursor-not-allowed': props.disabled,
+        'border-none': props.text,
+        'border-dashed': props.dashed
       }
     })
     const colorMap = computed(() => {
@@ -98,24 +104,61 @@ export default defineComponent({
       if (!props.color) {
         return {
           color: 'var(--poc-text-light-color)',
-          bgColor: `rgb(var(${nh.nv('color')}-${type.value}))`
+          bgColor: `rgb(var(--poc-color-${type.value}))`,
+          hoverColor: `var(--poc-color-${type.value}-opacity-2)`,
+          simpleBgColor: `var(--poc-color-${type.value}-opacity-8)`,
+          simpleHoverColor: `var(--poc-color-${type.value}-opacity-7)`
         }
       }
+
       return {
         color: 'var(--poc-text-light-color)',
-        bgColor: parseColorToRgba(props.color)
+        bgColor: parseColorToRgba(props.color),
+        hoverColor: adjustAlpha(parseColorToRgba(props.color), 0.8),
+        simpleBgColor: adjustAlpha(parseColorToRgba(props.color), 0.2),
+        simpleHoverColor: adjustAlpha(parseColorToRgba(props.color), 0.3)
       }
     })
 
     const style = computed<Record<string, string>>(() => {
       const { cvm } = nh
+      if (props.disabled) {
+        return cvm({
+          color: 'rgb(var(--poc-color-default))',
+          'bg-color': 'rgb(var(--poc-color-disabled))',
+          'hover-bg-color': 'rgb(var(--poc-color-disabled))'
+        })
+      }
       if (!colorMap.value) return {}
-      const { color, bgColor } = colorMap.value
-      return cvm({
+      const { color, bgColor, hoverColor, simpleBgColor, simpleHoverColor } = colorMap.value ?? {}
+
+      const style = {
         color,
         'bg-color': bgColor,
-        'border-color': bgColor
-      })
+        'border-color': bgColor,
+        'hover-bg-color': hoverColor
+      }
+      if (props.simple) {
+        style.color = bgColor as string
+        style['bg-color'] = simpleBgColor
+        style['hover-bg-color'] = simpleHoverColor
+      }
+
+      if (props.text) {
+        style.color = hoverColor as string
+        style['bg-color'] = 'initial'
+        style['hover-color'] = bgColor
+        style['hover-bg-color'] = 'initial'
+      }
+
+      if (props.dashed) {
+        style.color = hoverColor as string
+        style['bg-color'] = 'initial'
+        style['hover-color'] = bgColor
+        style['hover-bg-color'] = 'initial'
+      }
+
+      return cvm(style)
     })
 
     function handleClick(event: MouseEvent) {
@@ -131,21 +174,26 @@ export default defineComponent({
       emitEvent(props.onClick, event)
     }
 
+    function renderBadge() {
+      const badgeType = props.disabled ? 'disabled' : props.type === 'default' ? 'error' : props.type
+
+      return <Badge content={props.badge} type={badgeType}></Badge>
+    }
+
     return () => {
       const Button = (props.tag || 'button') as any
 
       return (
         <Button
-          poc='base-family padding-base'
+          poc='base-family padding-base ping-content'
           relative
-          ping-content
           h-8
+          leading-none
           tabular-nums
-          leading-normal
           inline-flex
           items-center
+          gap-1
           justify-center
-          leading-none
           whitespace-nowrap
           vertical-middle
           cursor-pointer
@@ -159,6 +207,7 @@ export default defineComponent({
           onClick={handleClick}
         >
           {!isIconOnly.value && slots.default ? slots.default() : null}
+          {!isIconOnly.value && (props.badge || props.badge === 0) ? renderBadge() : null}
         </Button>
       )
     }
