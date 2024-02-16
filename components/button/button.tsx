@@ -144,19 +144,19 @@ export default defineComponent({
         style['hover-bg-color'] = simpleHoverColor
       }
 
-      if (props.text) {
+      if (props.text || props.dashed) {
         style.color = hoverColor as string
         style['bg-color'] = 'initial'
         style['hover-color'] = bgColor
         style['hover-bg-color'] = 'initial'
       }
-
-      if (props.dashed) {
-        style.color = hoverColor as string
-        style['bg-color'] = 'initial'
-        style['hover-color'] = bgColor
-        style['hover-bg-color'] = 'initial'
-      }
+      //
+      // if (props.dashed) {
+      //   style.color = hoverColor as string
+      //   style['bg-color'] = 'initial'
+      //   style['hover-color'] = bgColor
+      //   style['hover-bg-color'] = 'initial'
+      // }
 
       return cvm(style)
     })
