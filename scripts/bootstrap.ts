@@ -1,10 +1,12 @@
-import { resolve } from 'node:path'
 import { writeFile } from 'node:fs/promises'
 
-import { format } from 'prettier'
-import { ESLint } from 'eslint'
+import { resolve } from 'node:path'
+
 import { logger } from '@pillars-of-creation-ui/scripts'
 import { toCapitalCase } from '@pillars-of-creation-ui/utils'
+import { ESLint } from 'eslint'
+
+import { format } from 'prettier'
 import { components as allComponents, prettierConfig, rootDir } from './constant'
 
 async function main() {
@@ -14,9 +16,7 @@ async function main() {
   const components = exportComponents.filter(c => !plugins.includes(c))
 
   const index = `
-    ${exportComponents
-      .map(component => `import { ${toCapitalCase(component)} } from './${component}'`)
-      .join('\n')}
+    ${exportComponents.map(component => `import { ${toCapitalCase(component)} } from './${component}'`).join('\n')}
 
     import { buildInstall } from './create'
 
@@ -38,12 +38,7 @@ async function main() {
     declare module 'vue' {
       export interface GlobalComponents {
         ${[...components]
-          .map(
-            name =>
-              `Z${toCapitalCase(name)}: typeof import('pillars-of-creation-ui')['${toCapitalCase(
-                name
-              )}']`
-          )
+          .map(name => `Poc${toCapitalCase(name)}: typeof import('pillars-of-creation-ui')['${toCapitalCase(name)}']`)
           .join(',\n')}
       }
     }
@@ -64,7 +59,7 @@ async function main() {
   const metaData = `
     {
       components: [
-        ${exportComponents.map(name => `"Z${toCapitalCase(name)}"`).join(',\n')}
+        ${exportComponents.map(name => `"Poc${toCapitalCase(name)}"`).join(',\n')}
       ]
     }
   `
@@ -75,9 +70,30 @@ async function main() {
   const metaDataPath = resolve(rootDir, 'meta-data.json')
 
   await Promise.all([
-    writeFile(indexPath, await format(index, { ...prettierConfig, parser: 'typescript' }), 'utf-8'),
-    writeFile(typesPath, await format(types, { ...prettierConfig, parser: 'typescript' }), 'utf-8'),
-    writeFile(metaDataPath, await format(metaData, { ...prettierConfig, parser: 'json' }), 'utf-8')
+    writeFile(
+      indexPath,
+      await format(index, {
+        ...prettierConfig,
+        parser: 'typescript'
+      }),
+      'utf-8'
+    ),
+    writeFile(
+      typesPath,
+      await format(types, {
+        ...prettierConfig,
+        parser: 'typescript'
+      }),
+      'utf-8'
+    ),
+    writeFile(
+      metaDataPath,
+      await format(metaData, {
+        ...prettierConfig,
+        parser: 'json'
+      }),
+      'utf-8'
+    )
   ])
 
   await ESLint.outputFixes(await eslint.lintFiles([indexPath, typesPath, metaDataPath]))
