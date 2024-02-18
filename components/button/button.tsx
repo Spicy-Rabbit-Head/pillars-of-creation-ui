@@ -1,6 +1,4 @@
-import { Badge } from '@/components'
-
-import { computed, defineComponent, inject, ref } from 'vue'
+import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref } from 'vue'
 
 import { createSizeProp, emitEvent, useNameHelper, useProps } from '@pillars-of-creation-ui/config'
 
@@ -8,7 +6,7 @@ import { adjustAlpha, parseColorToRgba } from '@pillars-of-creation-ui/utils'
 
 import { buttonProps } from './props'
 
-import { buttonTypes } from './symbol'
+import { GROUP_STATE, buttonTypes } from './symbol'
 
 import type { ComponentSize, ComponentState } from '@pillars-of-creation-ui/config'
 
@@ -78,10 +76,10 @@ export default defineComponent({
       },
       block: false,
       tag: 'button',
-      noPulse: false,
-      badge: null
+      noPulse: false
     })
     const nh = useNameHelper('button')
+    const groupState = inject(GROUP_STATE, null)
     const pulsing = ref(false)
     const index = ref(0)
     const isLast = ref(false)
@@ -89,14 +87,26 @@ export default defineComponent({
       return !slots.default
     })
     const type = computed(() => {
-      return props.type ?? 'default'
+      return props.type ?? groupState?.type ?? 'default'
+    })
+    const size = computed(() => {
+      return groupState?.size ?? props.size
+    })
+    const sizeCardinality = computed(() => {
+      return size.value !== 'default' ? (size.value === 'small' ? 6 : 10) : 8
     })
     const className = computed(() => {
       return {
         'after:animate-button-ping': pulsing.value && !props.text,
         'cursor-not-allowed': props.disabled,
         'border-none': props.text,
-        'border-dashed': props.dashed
+        'border-dashed': props.dashed,
+        [`w-${sizeCardinality.value}`]: isIconOnly.value,
+        [`h-${sizeCardinality.value}`]: true,
+        'rounded-full': props.circle || groupState?.circle,
+        'rounded-none': index.value > 1 && !isLast.value,
+        'rounded-r-none': index.value === 1,
+        'rounded-l-none': isLast.value
       }
     })
     const colorMap = computed(() => {
@@ -150,16 +160,22 @@ export default defineComponent({
         style['hover-color'] = bgColor
         style['hover-bg-color'] = 'initial'
       }
-      //
-      // if (props.dashed) {
-      //   style.color = hoverColor as string
-      //   style['bg-color'] = 'initial'
-      //   style['hover-color'] = bgColor
-      //   style['hover-bg-color'] = 'initial'
-      // }
 
       return cvm(style)
     })
+
+    if (groupState) {
+      const state = reactive({
+        index,
+        isLast
+      })
+
+      groupState.increaseItem(state)
+
+      onBeforeUnmount(() => {
+        groupState.decreaseItem(state)
+      })
+    }
 
     function handleClick(event: MouseEvent) {
       if (props.disabled || props.loading || event.button) return
@@ -174,10 +190,46 @@ export default defineComponent({
       emitEvent(props.onClick, event)
     }
 
-    function renderBadge() {
-      const badgeType = props.disabled ? 'disabled' : props.type === 'default' ? 'error' : props.type
+    function renderLoadingIcon() {
+      return (
+        <div>
+          {slots.loading
+            ? (
+                slots.loading()
+              )
+            : props.loadingIcon
+              ? (
+                <div class={props.loadingIcon}></div>
+                )
+              : (
+                <div class='i-svg-spinners-12-dots-scale-rotate'></div>
+                )}
+        </div>
+      )
+    }
 
-      return <Badge content={props.badge} type={badgeType}></Badge>
+    function renderSingleIcon() {
+      return props.loading
+        ? (
+            renderLoadingIcon()
+          )
+        : (
+          <div>{slots.icon ? slots.icon() : props.icon ? <div class={props.icon}></div> : null}</div>
+          )
+    }
+
+    function renderCollapseIcon() {
+      if (props.icon || slots.icon) {
+        return props.loading
+          ? (
+              renderLoadingIcon()
+            )
+          : (
+            <div>{slots.icon ? slots.icon() : <div class={props.icon}></div>}</div>
+            )
+      }
+
+      return null
     }
 
     return () => {
@@ -187,7 +239,6 @@ export default defineComponent({
         <Button
           poc='base-family padding-base ping-content'
           relative
-          h-8
           leading-none
           tabular-nums
           inline-flex
@@ -206,8 +257,8 @@ export default defineComponent({
           style={style.value}
           onClick={handleClick}
         >
+          {isIconOnly.value ? renderSingleIcon() : renderCollapseIcon()}
           {!isIconOnly.value && slots.default ? slots.default() : null}
-          {!isIconOnly.value && (props.badge || props.badge === 0) ? renderBadge() : null}
         </Button>
       )
     }
