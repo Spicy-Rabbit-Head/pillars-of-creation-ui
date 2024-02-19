@@ -13,16 +13,16 @@ import Layout from '../layout.vue'
         grid-cols-4
         justify-items-center
       >
-        <z-badge :content="34"></z-badge>
-        <z-badge :content="34" type="primary"></z-badge>
-        <z-badge :content="34" type="success"></z-badge>
-        <z-badge :content="34" type="warning"></z-badge>
-        <z-badge :content="34" type="info"></z-badge>
-        <z-badge :content="34" type="disabled"></z-badge>
+        <poc-badge :content="34"></poc-badge>
+        <poc-badge :content="34" type="primary"></poc-badge>
+        <poc-badge :content="34" type="success"></poc-badge>
+        <poc-badge :content="34" type="warning"></poc-badge>
+        <poc-badge :content="34" type="info"></poc-badge>
+        <poc-badge :content="34" type="disabled"></poc-badge>
       </div>
     </layout-content>
     <layout-content content="最大值">
-      <z-badge :content="34" :max="10"></z-badge>
+      <poc-badge :content="34" :max="10"></poc-badge>
     </layout-content>
     <layout-content content="状态点">
       <div
@@ -31,16 +31,16 @@ import Layout from '../layout.vue'
         grid-cols-4
         justify-items-center
       >
-        <z-badge :content="34" is-dot></z-badge>
-        <z-badge :content="34" type="primary" is-dot></z-badge>
-        <z-badge :content="34" type="success" is-dot></z-badge>
-        <z-badge :content="34" type="warning" is-dot></z-badge>
-        <z-badge :content="34" type="info" is-dot></z-badge>
-        <z-badge :content="34" type="disabled" is-dot></z-badge>
+        <poc-badge :content="34" is-dot></poc-badge>
+        <poc-badge :content="34" type="primary" is-dot></poc-badge>
+        <poc-badge :content="34" type="success" is-dot></poc-badge>
+        <poc-badge :content="34" type="warning" is-dot></poc-badge>
+        <poc-badge :content="34" type="info" is-dot></poc-badge>
+        <poc-badge :content="34" type="disabled" is-dot></poc-badge>
       </div>
     </layout-content>
     <layout-content content="自定义颜色">
-      <z-badge :content="34" color=" #dc39b0"></z-badge>
+      <poc-badge :content="34" color=" #dc39b0"></poc-badge>
     </layout-content>
   </layout>
 </template>
