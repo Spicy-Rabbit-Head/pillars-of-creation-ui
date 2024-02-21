@@ -12,7 +12,7 @@ import type { ComponentSize, ComponentState } from '@pillars-of-creation-ui/conf
 
 import type { EventEmitter } from '@pillars-of-creation-ui/utils'
 
-import type { ComputedRef, InjectionKey, Ref } from 'vue'
+import type { ComputedRef, InjectionKey, Ref, SlotsType } from 'vue'
 
 interface FieldOptions {
   prop: ComputedRef<string>,
@@ -52,6 +52,11 @@ export default defineComponent({
   name: 'Button',
   props: buttonProps,
   emits: [],
+  slots: Object as SlotsType<{
+    default: void,
+    icon: void,
+    loading: void
+  }>,
   setup(_props, { slots }) {
     const fieldActions = inject(FIELD_OPTIONS, null)
     const props = useProps('button', _props, {
@@ -95,18 +100,30 @@ export default defineComponent({
     const sizeCardinality = computed(() => {
       return size.value !== 'default' ? (size.value === 'small' ? 6 : 10) : 8
     })
+    const groupClassName = computed(() => {
+      return type.value !== 'default'
+        ? {
+            'border-x-white/80': index.value > 1 && !isLast.value,
+            'border-r-white/80': index.value === 1,
+            'border-l-white/80': isLast.value
+          }
+        : {}
+    })
     const className = computed(() => {
       return {
         'after:animate-button-ping': pulsing.value && !props.text,
         'cursor-not-allowed': props.disabled,
         'border-none': props.text,
         'border-dashed': props.dashed,
-        [`w-${sizeCardinality.value}`]: isIconOnly.value,
+        [`size-${sizeCardinality.value}`]: isIconOnly.value,
+        '!p-0': isIconOnly.value,
         [`h-${sizeCardinality.value}`]: true,
         'rounded-full': props.circle || groupState?.circle,
         'rounded-none': index.value > 1 && !isLast.value,
         'rounded-r-none': index.value === 1,
-        'rounded-l-none': isLast.value
+        'rounded-l-none': isLast.value,
+        '-mr-px': !isLast.value,
+        ...groupClassName.value
       }
     })
     const colorMap = computed(() => {
@@ -250,6 +267,8 @@ export default defineComponent({
           cursor-pointer
           select-none
           rounded
+          z-1
+          hover:z-2
           type={props.buttonType}
           class={className.value}
           role='button'
