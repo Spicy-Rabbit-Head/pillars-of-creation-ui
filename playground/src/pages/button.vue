@@ -1,6 +1,17 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+
 import LayoutContent from '../layout-content.vue'
 import Layout from '../layout.vue'
+
+const loading = ref(false)
+
+function toggleLoading() {
+  loading.value = true
+  setTimeout(() => {
+    loading.value = false
+  }, 2000)
+}
 </script>
 
 <template>
@@ -12,25 +23,25 @@ import Layout from '../layout.vue'
         gap-2
         justify-items-center
       >
-        <z-button>Default</z-button>
-        <z-button type="primary">
+        <poc-button>Default</poc-button>
+        <poc-button type="primary">
           Primary
-        </z-button>
-        <z-button type="info">
+        </poc-button>
+        <poc-button type="info">
           Info
-        </z-button>
-        <z-button type="success">
+        </poc-button>
+        <poc-button type="success">
           Success
-        </z-button>
-        <z-button type="warning">
+        </poc-button>
+        <poc-button type="warning">
           Warning
-        </z-button>
-        <z-button type="error">
+        </poc-button>
+        <poc-button type="error">
           Error
-        </z-button>
-        <z-button color="orange">
+        </poc-button>
+        <poc-button color="orange">
           自定义
-        </z-button>
+        </poc-button>
       </div>
     </layout-content>
     <layout-content content="禁用状态">
@@ -40,16 +51,16 @@ import Layout from '../layout.vue'
         gap-2
         justify-items-center
       >
-        <z-button>Default</z-button>
-        <z-button disabled>
+        <poc-button>Default</poc-button>
+        <poc-button disabled>
           Default
-        </z-button>
-        <z-button type="primary">
+        </poc-button>
+        <poc-button type="primary">
           Primary
-        </z-button>
-        <z-button type="primary" disabled>
+        </poc-button>
+        <poc-button type="primary" disabled>
           Primary
-        </z-button>
+        </poc-button>
       </div>
     </layout-content>
     <layout-content content="简约风格">
@@ -59,24 +70,24 @@ import Layout from '../layout.vue'
         gap-2
         justify-items-center
       >
-        <z-button simple type="primary">
+        <poc-button simple type="primary">
           Primary
-        </z-button>
-        <z-button simple type="info">
+        </poc-button>
+        <poc-button simple type="info">
           Info
-        </z-button>
-        <z-button simple type="success">
+        </poc-button>
+        <poc-button simple type="success">
           Success
-        </z-button>
-        <z-button simple type="warning">
+        </poc-button>
+        <poc-button simple type="warning">
           Warning
-        </z-button>
-        <z-button simple type="error">
+        </poc-button>
+        <poc-button simple type="error">
           Error
-        </z-button>
-        <z-button simple color="teal">
+        </poc-button>
+        <poc-button simple color="teal">
           自定义
-        </z-button>
+        </poc-button>
       </div>
     </layout-content>
     <layout-content content="文字按钮">
@@ -86,24 +97,24 @@ import Layout from '../layout.vue'
         gap-2
         justify-items-center
       >
-        <z-button text type="primary">
+        <poc-button text type="primary">
           Primary
-        </z-button>
-        <z-button text type="info">
+        </poc-button>
+        <poc-button text type="info">
           Info
-        </z-button>
-        <z-button text type="success">
+        </poc-button>
+        <poc-button text type="success">
           Success
-        </z-button>
-        <z-button text type="warning">
+        </poc-button>
+        <poc-button text type="warning">
           Warning
-        </z-button>
-        <z-button text type="error">
+        </poc-button>
+        <poc-button text type="error">
           Error
-        </z-button>
-        <z-button text color="teal">
+        </poc-button>
+        <poc-button text color="teal">
           自定义
-        </z-button>
+        </poc-button>
       </div>
     </layout-content>
     <layout-content content="虚线按钮">
@@ -113,36 +124,108 @@ import Layout from '../layout.vue'
         gap-2
         justify-items-center
       >
-        <z-button dashed type="primary">
+        <poc-button dashed type="primary">
           Primary
-        </z-button>
-        <z-button dashed type="info">
+        </poc-button>
+        <poc-button dashed type="info">
           Info
-        </z-button>
-        <z-button dashed type="success">
+        </poc-button>
+        <poc-button dashed type="success">
           Success
-        </z-button>
-        <z-button dashed type="warning">
+        </poc-button>
+        <poc-button dashed type="warning">
           Warning
-        </z-button>
-        <z-button dashed type="error">
+        </poc-button>
+        <poc-button dashed type="error">
           Error
-        </z-button>
-        <z-button dashed color="teal">
+        </poc-button>
+        <poc-button dashed color="teal">
           自定义
-        </z-button>
+        </poc-button>
       </div>
     </layout-content>
-    <layout-content content="内置徽标">
+    <layout-content content="图标按钮">
       <div
         grid
         grid-cols-4
         gap-2
         justify-items-center
       >
-        <z-button badge="2" type="primary">
+        <poc-button icon="i-ep-place" type="primary">
           Primary
-        </z-button>
+        </poc-button>
+        <poc-button icon="i-ep-grape" type="primary"></poc-button>
+        <poc-button icon="i-ep-home-filled" circle type="error">
+          Error
+        </poc-button>
+        <poc-button circle icon="i-ep-drizzling" type="primary"></poc-button>
+      </div>
+    </layout-content>
+    <layout-content content="加载状态">
+      <div
+        grid
+        grid-cols-4
+        gap-2
+        justify-items-center
+      >
+        <poc-button loading icon="i-ep-grape" type="primary">
+          Primary
+        </poc-button>
+        <poc-button
+          loading
+          loading-icon="i-svg-spinners-wind-toy"
+          icon="i-ep-grape"
+          type="error"
+        >
+          Error
+        </poc-button>
+        <poc-button :loading="loading" type="warning" @click.stop="toggleLoading">
+          <template #icon>
+            <div class="i-ep-refresh"></div>
+          </template>
+          Warning
+        </poc-button>
+        <poc-button
+          :loading="loading"
+          circle
+          icon="i-ep-refresh"
+          type="success"
+          @click.stop="toggleLoading"
+        >
+        </poc-button>
+        <poc-button :loading="loading" type="success" @click.stop="toggleLoading">
+          2秒后恢复
+        </poc-button>
+      </div>
+    </layout-content>
+    <layout-content content="按钮组">
+      <div class="grid gap-2">
+        <poc-button-group>
+          <poc-button> Default</poc-button>
+          <poc-button type="info">
+            Info
+          </poc-button>
+          <poc-button type="success">
+            Success
+          </poc-button>
+        </poc-button-group>
+        <poc-button-group size="large" circle>
+          <poc-button type="primary">
+            Primary
+          </poc-button>
+          <poc-button type="info">
+            Info
+          </poc-button>
+          <poc-button type="success">
+            Success
+          </poc-button>
+        </poc-button-group>
+        <poc-button-group size="small">
+          <poc-button icon="i-ep-d-arrow-left">
+          </poc-button>
+          <poc-button icon="i-ep-d-arrow-right">
+          </poc-button>
+        </poc-button-group>
       </div>
     </layout-content>
   </layout>
