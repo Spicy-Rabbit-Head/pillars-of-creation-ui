@@ -20,7 +20,11 @@ const borderStyle = {
  * 边框颜色
  */
 const borderColor = {
-  '--poc-border-color': '#ced4da'
+  '--poc-border-color': '#ced4da',
+  '--poc-border-color-light-1': '#dee2e6',
+  '--poc-border-color-light-2': '#e9ecef',
+  '--poc-border-color-dark-1': '#adb5bd',
+  '--poc-border-color-dark-2': '#868e96'
 }
 
 /**
@@ -31,10 +35,17 @@ const borderRadius = {
 }
 
 /**
+ * 边框形状
+ */
+const borderShape = {
+  '--poc-border-shape': 'var(--poc-border-width) var(--poc-border-style)'
+}
+
+/**
  * 边框
  */
 const border = {
-  '--poc-border-base': 'var(--poc-border-width) var(--poc-border-style) var(--poc-border-color)'
+  '--poc-border-base': 'var(--poc-border-shape) var(--poc-border-color)'
 }
 
 export const bordersVariable = {
@@ -42,6 +53,7 @@ export const bordersVariable = {
   ...borderStyle,
   ...borderColor,
   ...borderRadius,
+  ...borderShape,
   ...border
 }
 
