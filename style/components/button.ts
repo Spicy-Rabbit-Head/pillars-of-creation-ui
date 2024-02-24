@@ -16,7 +16,6 @@ export const buttonVariables: CSSVariables = {
  */
 export const buttonStyle: CSSVariables = {
   color: 'var(--poc-button-color)',
-  fontSize: 'var(--poc-font-size)',
   backgroundColor: 'var(--poc-button-bg-color)',
   border: 'var(--poc-border-width) var(--poc-border-style) var(--poc-button-border-color)',
   transition: 'var(--poc-transition-color), var(--poc-transition-background)'
