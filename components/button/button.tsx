@@ -152,8 +152,8 @@ export default defineComponent({
       if (props.disabled) {
         return cvm({
           color: 'rgb(var(--poc-color-default))',
-          'bg-color': 'rgb(var(--poc-color-disabled))',
-          'hover-bg-color': 'rgb(var(--poc-color-disabled))'
+          'bg-color': 'WhiteSmoke',
+          'hover-bg-color': 'WhiteSmoke'
         })
       }
       if (!colorMap.value) return {}
@@ -254,7 +254,7 @@ export default defineComponent({
 
       return (
         <Button
-          poc='base-family padding-base ping-content'
+          poc='base-family padding-base ping-content font-size-base'
           relative
           leading-none
           tabular-nums
