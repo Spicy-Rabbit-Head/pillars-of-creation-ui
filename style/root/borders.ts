@@ -31,7 +31,7 @@ const borderColor = {
  * 边框圆角
  */
 const borderRadius = {
-  '--poc-border-radius': '0.25rem'
+  '--poc-border-radius-base': '0.25rem'
 }
 
 /**
