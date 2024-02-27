@@ -1,7 +1,10 @@
+import { objectToKeyframes } from '../utils'
+
 import type { Rule } from 'unocss'
+import type { AnimationClass } from '../symbol'
 
 const duration = {
-  '--poc-transition-duration': '0.25s'
+  '--poc-transition-duration': '0.5s'
 }
 
 const timing = {
@@ -33,28 +36,36 @@ export const transitionClass: Rule[] = [
   ['poc-transition-shadow', { transition: 'var(--poc-transition-shadow)' }]
 ]
 
-export const animation = {
-  /**
-   * 关键帧
-   */
-  keyframes: {
-    'button-ping':
-      '{0% {box-shadow: 0 0 1px 0 var(--poc-button-border-color); opacity: 1;} 100% {box-shadow: 0 0 1px 6px var(--poc-button-border-color); opacity: 0;}}'
-  },
-  /**
-   * 动画属性
-   */
-  property: {},
-  /**
-   * 时间函数
-   */
-  timingFns: {
-    'button-ping': 'cubic-bezier(0, 0, 0.2, 1)'
-  },
-  /**
-   * 动画次数
-   */
-  counts: {
-    'button-ping': 1
-  }
+const shadowPoc: AnimationClass = {
+  key: 'shadow-ping',
+  keyframes: [
+    {
+      frames: '0%',
+      values: {
+        'box-shadow': '0 0 1px 0 var(--poc-shadow-color)',
+        opacity: 1
+      }
+    },
+    {
+      frames: '100%',
+      values: {
+        'box-shadow': '0 0 1px 6px var(--poc-shadow-color)',
+        opacity: 0
+      }
+    }
+  ],
+  duration: '1s',
+  timingFns: 'cubic-bezier(0, 0, 0.2, 1)',
+  counts: 1
 }
+
+const animation: AnimationClass[] = [shadowPoc]
+
+export const animationClass: Rule[] = [
+  ...animation.reduce((acc, { key, duration, timingFns, counts }) => {
+    acc.push([`poc-animate-${key}`, { animation: `poc-${key} ${duration} ${timingFns} ${counts};` }])
+    return acc as Rule[]
+  }, [] as Rule[])
+]
+
+export const keyframesClass = animation.map(objectToKeyframes).join('\n')
