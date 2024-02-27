@@ -1,4 +1,4 @@
-import type { CSSPseudoClass, CSSVariables, ComponentRoleClass } from '../symbol'
+import type { CSSPseudoClass, CSSVariables, ComponentRoleClass, DynamicCSS } from '../symbol'
 
 /**
  * 按钮变量
@@ -14,7 +14,7 @@ export const buttonVariables: CSSVariables = {
 /**
  * 按钮样式
  */
-export const buttonStyle: CSSVariables = {
+export const buttonStyle: DynamicCSS = {
   color: 'var(--poc-button-color)',
   backgroundColor: 'var(--poc-button-bg-color)',
   border: 'var(--poc-border-width) var(--poc-border-style) var(--poc-button-border-color)',

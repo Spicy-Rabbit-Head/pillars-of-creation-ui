@@ -1,4 +1,4 @@
-import type { CSSVariables, ComponentRoleClass } from '../symbol'
+import type { CSSVariables, ComponentRoleClass, DynamicCSS } from '../symbol'
 
 /**
  * 徽章变量
@@ -12,7 +12,7 @@ export const badgeVariables: CSSVariables = {
 /**
  * 徽章样式
  */
-export const badgeStyle: CSSVariables = {
+export const badgeStyle: DynamicCSS = {
   color: 'var(--poc-badge-color)',
   backgroundColor: 'var(--poc-badge-bg-color)',
   boxShadow: 'var(--poc-shadow-border) var(--poc-badge-b-color)'
