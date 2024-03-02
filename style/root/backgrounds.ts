@@ -2,6 +2,10 @@ import { typeClass } from '../symbol'
 
 import type { Rule } from 'unocss'
 
+export const baseBackgrounds = {
+  '--poc-bg-color-base': '#FFF'
+}
+
 export const backgroundsClass = [
   ...typeClass().reduce((acc, type) => {
     acc.push([`poc-bg-${type}`, { background: `rgb(var(--poc-color-${type}))` }])
