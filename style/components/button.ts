@@ -8,7 +8,8 @@ export const buttonVariables: CSSVariables = {
   '--poc-button-bg-color': 'transparent',
   '--poc-button-hover-color': 'var(--poc-button-color)',
   '--poc-button-border-color': 'rgb(var(--poc-color-default))',
-  '--poc-button-hover-bg-color': 'var(--poc-color-default-opacity-5)'
+  '--poc-button-hover-bg-color': 'var(--poc-color-default-opacity-5)',
+  '--poc-shadow-color': 'rgb(var(--poc-color-default))'
 }
 
 /**
