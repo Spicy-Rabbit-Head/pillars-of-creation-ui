@@ -1,3 +1,5 @@
+import { CollapseTransition } from '@/components/collapse-transition'
+
 import { computed, defineComponent, inject, onBeforeUnmount, reactive, ref } from 'vue'
 
 import { createSizeProp, emitEvent, useNameHelper, useProps } from '@pillars-of-creation-ui/config'
@@ -111,7 +113,7 @@ export default defineComponent({
     })
     const className = computed(() => {
       return {
-        'after:animate-button-ping': pulsing.value && !props.text,
+        'after:poc-animate-shadow-ping': pulsing.value && !props.text,
         'cursor-not-allowed': props.disabled,
         'border-none': props.text,
         'border-dashed': props.dashed,
@@ -178,7 +180,7 @@ export default defineComponent({
         style['hover-bg-color'] = 'initial'
       }
 
-      return cvm(style)
+      return [cvm(style), { [nh.nv('shadow-color')]: bgColor }]
     })
 
     if (groupState) {
@@ -209,7 +211,7 @@ export default defineComponent({
 
     function renderLoadingIcon() {
       return (
-        <div>
+        <div class={!isIconOnly.value ? 'mr-1' : null}>
           {slots.loading
             ? (
                 slots.loading()
@@ -242,11 +244,15 @@ export default defineComponent({
               renderLoadingIcon()
             )
           : (
-            <div>{slots.icon ? slots.icon() : <div class={props.icon}></div>}</div>
+            <div mr-1>{slots.icon ? slots.icon() : <div class={props.icon}></div>}</div>
             )
       }
 
-      return null
+      return (
+        <CollapseTransition appear horizontal fade-effect>
+          {props.loading && renderLoadingIcon()}
+        </CollapseTransition>
+      )
     }
 
     return () => {
@@ -260,7 +266,6 @@ export default defineComponent({
           tabular-nums
           inline-flex
           items-center
-          gap-1
           justify-center
           whitespace-nowrap
           vertical-middle
