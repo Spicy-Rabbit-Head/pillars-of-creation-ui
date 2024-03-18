@@ -1,4 +1,4 @@
-import type { AnimationClass } from '../../symbol'
+import type { AnimationClass } from '../../../symbol'
 
 const shadowPing: AnimationClass = {
   key: 'shadow-ping',
