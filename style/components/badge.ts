@@ -4,7 +4,7 @@ import type { CSSVariables, ComponentRoleClass, DynamicCSS } from '../symbol'
  * 徽章变量
  */
 export const badgeVariables: CSSVariables = {
-  '--poc-badge-color': 'var(--poc-text-light-color)',
+  '--poc-badge-color': 'var(--poc-color-white)',
   '--poc-badge-bg-color': 'rgb(var(--poc-color-error))',
   '--poc-badge-b-color': 'var(--poc-color-error-opacity-8)'
 }
