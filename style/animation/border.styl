@@ -1,0 +1,28 @@
+// 定义边框变圆动画
+@keyframes poc-border-round
+  100%
+    transform rotate(1turn)
+
+// 定义水平移动边框动画
+@keyframes poc-h-moving-border
+  0%
+  100%
+    transform translate3d(-100%, 0, 0) scaleX(0.2)
+  25%
+    transform translate3d(0, 0, 0) scaleX(1)
+  50%
+    transform translate3d(100%, 0, 0) scaleX(0.2)
+  75%
+    transform translate3d(0, 0, 0) scaleX(1)
+
+// 定义垂直移动边框动画
+@keyframes poc-v-moving-border
+  0%
+  100%
+    transform translate3d(0, -100%, 0) scaleY(0.2)
+  25%
+    transform translate3d(0, 0, 0) scaleY(1)
+  50%
+    transform translate3d(0, 100%, 0) scaleY(0.2)
+  75%
+    transform translate3d(0, 0, 0) scaleY(1)
