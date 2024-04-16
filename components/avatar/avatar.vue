@@ -8,7 +8,7 @@ import { emitEvent, useNameHelper, useProps } from '@pillars-of-creation-ui/conf
 import { avatarProps } from './props.ts'
 import { GROUP_STATE, objectFitValues } from './symbol.ts'
 
-import type { StyleType } from '@pillars-of-creation-ui/config'
+import type { ComponentSize, StyleType } from '@pillars-of-creation-ui/config'
 
 defineOptions({ name: 'Avatar' })
 
@@ -53,6 +53,17 @@ const size = computed(() => {
   return groupState?.size ?? props.size
 })
 
+const className = computed(() => {
+  return [
+    nh.b(),
+    nh.bs('vars'),
+    {
+      [nh.bm(size.value as ComponentSize)]: typeof size.value !== 'number' && size.value !== 'default',
+      'rounded-1/2': props.circle
+    }
+  ]
+})
+
 const style = computed(() => {
   const style: StyleType = {
     [nh.cv('color')]: props.color,
@@ -62,10 +73,7 @@ const style = computed(() => {
 
   if (typeof size.value === 'number') {
     style[nh.cv('size')] = `${size.value}px`
-  } else {
-    style[nh.cv('size')] = props.size !== 'default' ? (props.size === 'small' ? '26px' : '40px') : null!
   }
-  style.border = 'var(--poc-avatar-b-width) var(--poc-avatar-b-style) var(--poc-avatar-b-color)'
 
   return style
 })
@@ -124,21 +132,21 @@ function handleClick(event: MouseEvent) {
 <template>
   <div
     ref="wrapper"
-    :class="[
-      'poc-(base-family content-color-base) text-3.5 tabular-nums leading-normal inline-flex shrink-0 items-center justify-center overflow-hidden align-middle select-none rounded',
-      {
-        'rounded-1/2': props.circle
-      }
-    ]"
-    poc-role="avatar"
-    poc-vars="avatar"
+    inline-flex
+    shrink-0
+    items-center
+    justify-center
+    overflow-hidden
+    leading-none
+    align-middle
+    select-none
+    :class="className"
     :style="style"
     @click="handleClick"
   >
     <img
       v-if="(props.src || props.srcSet) && !loadFail"
-      class="h-full pointer-events-none"
-      style="object-fit: var(--poc-avatar-image-fit)"
+      :class="nh.be('image')"
       :src="props.src"
       :alt="props.alt"
       :srcset="props.srcSet"
@@ -146,8 +154,7 @@ function handleClick(event: MouseEvent) {
     />
     <img
       v-else-if="loadFail && props.fallbackSrc && !fallbackFail"
-      class="h-full pointer-events-none"
-      style="object-fit: var(--poc-avatar-image-fit)"
+      :class="nh.be('image')"
       :src="props.fallbackSrc"
       :alt="props.alt"
       @error="fallbackFail = true"
