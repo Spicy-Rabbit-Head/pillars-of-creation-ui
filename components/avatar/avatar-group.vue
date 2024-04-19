@@ -11,6 +11,7 @@ import { avatarGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
 import type { AvatarOption } from './symbol'
+import type { ComponentSize } from '@pillars-of-creation-ui/config'
 
 defineOptions({ name: 'AvatarGroup' })
 
@@ -56,6 +57,19 @@ watchEffect(() => {
 
 provide(GROUP_STATE, props)
 
+const className = computed(() => {
+  return [
+    nh.b(),
+    nh.ns('avatar-vars'),
+    {
+      [nh.in()]: props.inherit,
+      [nh.bm(props.size as ComponentSize)]: typeof props.size !== 'number' && props.size !== 'default',
+      [nh.bm('vertical')]: props.vertical,
+      'flex-col': props.vertical
+    }
+  ]
+})
+
 const style = computed(() => {
   const style: Record<string, string> = {}
 
@@ -69,23 +83,12 @@ const style = computed(() => {
 
 <template>
   <div
-    :class="[
-      'poc-(base-family content-color-base) text-3.5 tabular-nums leading-normal inline-flex',
-      {
-        'flex-col': props.vertical
-      }
-    ]"
-    poc-vars="avatar"
+    inline-flex
+    :class="className"
     role="group"
     :style="style"
   >
-    <div
-      v-for="(option, index) in renderAvatars"
-      :key="index"
-      :poc-role="props.vertical ? '' : 'avatar-group-item'"
-      :class="['relative', { 'rounded-1/2': props.circle, ' ml-0': props.vertical }]"
-      style="background-color: var(--poc-bg-color-base)"
-    >
+    <div v-for="(option, index) in renderAvatars" :key="index" :class="nh.be('item')">
       <slot :option="option" :index="index">
         <Avatar
           :src="option.src"
@@ -102,15 +105,9 @@ const style = computed(() => {
         </Avatar>
       </slot>
     </div>
-    <div
-      v-if="restAvatars.length"
-      poc-role="avatar-group-item"
-      :class="['relative cursor-pointer', { 'rounded-1/2': props.circle }]"
-      style="background-color: var(--poc-bg-color-base)"
-    >
+    <div v-if="restAvatars.length" :class="[nh.be('item'), nh.bem('item', 'rest')]">
       <Tooltip
         v-if="props.showTip"
-        inherit
         :trigger="props.tipTrigger"
         tip-class="cursor-pointer inline-flex items-center justify-center "
       >
