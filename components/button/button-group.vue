@@ -6,9 +6,9 @@ import { computed, provide, reactive, toRef } from 'vue'
 import { useProps } from '@pillars-of-creation-ui/config'
 import { debounceMinor } from '@pillars-of-creation-ui/utils'
 
-import { GROUP_STATE, buttonTypes } from '../button/symbol'
+import { GROUP_STATE, buttonTypes } from './symbol.ts'
 
-import type { ButtonState, ButtonType } from '../button/symbol'
+import type { ButtonState, ButtonType } from './symbol.ts'
 
 defineOptions({ name: 'ButtonGroup' })
 
