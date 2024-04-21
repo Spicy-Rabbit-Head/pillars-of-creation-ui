@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { Icon } from '@/components/icon'
 import { ResizeObserver } from '@/components/resize-observer'
 
 import { computed, inject, ref, watch } from 'vue'
 
-import { emitEvent, useNameHelper, useProps } from '@pillars-of-creation-ui/config'
+import { createIconProp, emitEvent, useNameHelper, useProps } from '@pillars-of-creation-ui/config'
 
 import { avatarProps } from './props.ts'
 import { GROUP_STATE, objectFitValues } from './symbol.ts'
@@ -19,7 +20,7 @@ const props = useProps('avatar', _props, {
     default: '',
     static: true
   },
-  icon: '',
+  icon: createIconProp(),
   circle: false,
   alt: '',
   fit: {
@@ -52,14 +53,17 @@ const text = ref<HTMLElement>()
 const size = computed(() => {
   return groupState?.size ?? props.size
 })
-
+const circle = computed(() => {
+  return groupState?.circle ?? props.circle
+})
 const className = computed(() => {
   return [
     nh.b(),
     nh.bs('vars'),
     {
+      [nh.in()]: props.inherit,
       [nh.bm(size.value as ComponentSize)]: typeof size.value !== 'number' && size.value !== 'default',
-      'rounded-1/2': props.circle
+      'rounded-1/2': circle.value
     }
   ]
 })
@@ -161,7 +165,7 @@ function handleClick(event: MouseEvent) {
     />
     <template v-else-if="props.icon || $slots.icon">
       <slot name="icon">
-        <span :class="props.icon" class="inline-flex"></span>
+        <Icon :icon="props.icon" :scale="props.iconScale"></Icon>
       </slot>
     </template>
     <ResizeObserver v-else :on-resize="scaleText">
