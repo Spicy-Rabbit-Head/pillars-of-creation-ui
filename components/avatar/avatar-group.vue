@@ -11,7 +11,6 @@ import { avatarGroupProps } from './props'
 import { GROUP_STATE } from './symbol'
 
 import type { AvatarOption } from './symbol'
-import type { ComponentSize } from '@pillars-of-creation-ui/config'
 
 defineOptions({ name: 'AvatarGroup' })
 
@@ -59,15 +58,16 @@ provide(GROUP_STATE, props)
 
 const className = computed(() => {
   return [
-    nh.b(),
     nh.ns('avatar-vars'),
     {
       [nh.in()]: props.inherit,
-      [nh.bm(props.size as ComponentSize)]: typeof props.size !== 'number' && props.size !== 'default',
-      [nh.bm('vertical')]: props.vertical,
-      'flex-col': props.vertical
+      [nh.bm('vertical')]: props.vertical
     }
   ]
+})
+
+const circle = computed(() => {
+  return props.circle ? 'rounded-1/2' : undefined
 })
 
 const style = computed(() => {
@@ -88,13 +88,12 @@ const style = computed(() => {
     role="group"
     :style="style"
   >
-    <div v-for="(option, index) in renderAvatars" :key="index" :class="nh.be('item')">
+    <div v-for="(option, index) in renderAvatars" :key="index" :class="[nh.be('item'), circle]">
       <slot :option="option" :index="index">
         <Avatar
           :src="option.src"
           :icon="option.icon"
           :alt="option.alt"
-          :circle="props.circle"
           :fit="option.fit"
           :src-set="option.srcSet"
           :gap="option.gap"
@@ -105,11 +104,12 @@ const style = computed(() => {
         </Avatar>
       </slot>
     </div>
-    <div v-if="restAvatars.length" :class="[nh.be('item'), nh.bem('item', 'rest')]">
+    <div v-if="restAvatars.length" :class="[nh.be('item'), nh.bem('item', 'rest'), circle]">
       <Tooltip
         v-if="props.showTip"
+        inherit
         :trigger="props.tipTrigger"
-        tip-class="cursor-pointer inline-flex items-center justify-center "
+        tip-class="flex"
       >
         <template #trigger>
           <slot name="rest" :options="restAvatars" :count="restAvatars.length">
@@ -127,8 +127,8 @@ const style = computed(() => {
           <Avatar
             v-for="(option, index) in restAvatars"
             :key="index"
+            inherit
             :src="option.src"
-            :circle="props.circle"
             :icon="option.icon"
             :alt="option.alt"
             :fit="option.fit"
@@ -147,7 +147,7 @@ const style = computed(() => {
         :options="restAvatars"
         :count="restAvatars.length"
       >
-        <Avatar :circle="props.circle" :color="props.restColor" :background="props.restBackground">
+        <Avatar :color="props.restColor" :background="props.restBackground">
           {{ `+${restAvatars.length}` }}
         </Avatar>
       </slot>
