@@ -1,0 +1,46 @@
+@require '../design/index.styl'
+
+// 定义动画名称
+-name = namespace + '-badge-zoom'
+
+// 定义动画开始样式
+-start = @block {
+  opacity 0
+  transform translate(50%, -50%) scale(0.35)
+}
+
+// 定义动画结束样式
+-end = @block {
+  opacity 1
+  transform translate(50%, -50%) scale(1)
+}
+
+// 定义动画名称
+-in = -name + '-in'
+-out = -name + '-out'
+
+// 定义动画
+.{-name}
+  &-enter-active
+    animation-name -in
+    animation-duration get-css-var('transition-duration')
+
+  &-leave-active
+    animation-name -out
+    animation-duration get-css-var('transition-duration')
+
+// 定义进入关键帧
+@keyframes -in
+  0%
+    {-start}
+
+  100%
+    {-end}
+
+// 定义退出关键帧
+@keyframes -out
+  0%
+    {-end}
+
+  100%
+    {-start}
