@@ -1,15 +1,16 @@
-import { statSync } from 'node:fs'
+import { existsSync, statSync } from 'node:fs'
 
 import { readFile, readdir, writeFile } from 'node:fs/promises'
+import { cpus } from 'node:os'
 
 import { resolve } from 'node:path'
 
-import { logger } from '@pillars-of-creation-ui/scripts'
-import { toCapitalCase } from '@pillars-of-creation-ui/utils'
+import { runParallel, toCapitalCase } from '@pillars-of-creation-ui/utils'
 import { ESLint } from 'eslint'
+import { logger } from '@pillars-of-creation-ui/scripts'
 
 import { format } from 'prettier'
-import { components as allComponents, prettierConfig, rootDir } from './constant'
+import { components as allComponents, componentsDir, prettierConfig, rootDir } from './constant'
 
 async function main() {
   const plugins = ['confirm', 'contextmenu', 'loading', 'message', 'notice', 'toast']
@@ -110,6 +111,30 @@ async function main() {
   ])
 
   await ESLint.outputFixes(await eslint.lintFiles([indexPath, typesPath, metaDataPath]))
+
+  await runParallel(cpus().length, allComponents, async component => {
+    const stylPath = resolve(rootDir, `style/${component}.styl`)
+
+    if (!existsSync(stylPath)) {
+      await writeFile(stylPath, '', 'utf-8')
+    }
+  })
+
+  const inherit = `
+.{namespace}-inherit
+  font-family: inherit;
+  font-size: inherit;
+  font-variant-numeric: inherit;
+  line-height: inherit
+
+.{namespace}-inherit-color
+  color: inherit
+  `
+  const componentsStyle =
+    (await topologicalStyle()).map(component => `@require './${component}.styl';`).join('\n') + '\n' + inherit
+  const styleIndex = "@require './preset.styl';\n\n" + componentsStyle
+  await writeFile(resolve(rootDir, 'style/components.styl'), componentsStyle, 'utf-8')
+  await writeFile(resolve(rootDir, 'style/index.styl'), styleIndex, 'utf-8')
 }
 
 async function readDirectives() {
@@ -140,6 +165,60 @@ async function readDirectives() {
         }
       })
   )
+}
+
+async function topologicalStyle() {
+  const importRE = /import '@\/components\/(.+)\/style'/
+  const depsMap = new Map<string, string[]>()
+
+  await runParallel(cpus().length, allComponents, async component => {
+    const deps: string[] = []
+    const path = resolve(componentsDir, component, 'style.ts')
+
+    depsMap.set(component, deps)
+
+    if (!existsSync(path)) {
+      return
+    }
+
+    let match: RegExpMatchArray | null
+
+    for (const line of (await readFile(path, 'utf-8')).split('\n')) {
+      if ((match = line.match(importRE)) && match[1] !== 'preset') {
+        deps.push(match[1])
+      }
+    }
+  })
+
+  const list: string[] = []
+  const walkedSet = new Set<string>()
+
+  const push = (deps: string[]) => {
+    for (const dep of deps) {
+      if (walkedSet.has(dep)) {
+        continue
+      }
+
+      walkedSet.add(dep)
+
+      if (depsMap.has(dep)) {
+        push(depsMap.get(dep)!)
+      }
+
+      list.push(dep)
+    }
+  }
+
+  for (const [component, deps] of depsMap) {
+    push(deps)
+
+    if (!walkedSet.has(component)) {
+      walkedSet.add(component)
+      list.push(component)
+    }
+  }
+
+  return list
 }
 
 main().catch(error => {
