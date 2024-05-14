@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <poc-dropdown>
+  <poc-dropdown trigger="click">
     <poc-button type="primary">
       下拉菜单
     </poc-button>
